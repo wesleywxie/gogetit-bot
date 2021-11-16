@@ -14,6 +14,17 @@ var (
 	date    = "unknown"
 
 	ProjectName          string = "gogetit"
+	SQLitePath           string
+
+	RunMode RunType = ReleaseMode
+
+	// DBLogMode 是否打印数据库日志
+	DBLogMode bool = false
+)
+
+const (
+	TestMode    RunType = "Test"
+	ReleaseMode RunType = "Release"
 )
 
 func AppVersionInfo() (s string) {
