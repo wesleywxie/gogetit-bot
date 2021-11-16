@@ -5,6 +5,7 @@ import (
 	"github.com/wesleywxie/gogetit/internal/util"
 	"go.uber.org/zap"
 	tb "gopkg.in/tucnak/telebot.v3"
+	"log"
 	"time"
 )
 
@@ -31,10 +32,7 @@ func init() {
 		return true
 	})
 
-	zap.S().Infow("init telegram bot",
-		"token", config.BotToken,
-		"endpoint", config.TelegramEndpoint,
-	)
+	log.Printf("init telegram bot, token=%v, endpoint=%v", config.BotToken, config.TelegramEndpoint)
 
 	// create bot
 	var err error
@@ -47,7 +45,7 @@ func init() {
 	})
 
 	if err != nil {
-		zap.S().Fatal(err)
+		log.Fatal(err)
 		return
 	}
 }
@@ -56,6 +54,27 @@ func init() {
 func Start() {
 	if config.RunMode != config.TestMode {
 		zap.S().Infof("bot start %s", config.AppVersionInfo())
+		setCommands()
+		setHandle()
 		B.Start()
 	}
+}
+
+func setCommands() {
+	// 设置bot命令提示信息
+	commands := []tb.Command{
+		{Text: "help", Description: "使用帮助"},
+		{Text: "version", Description: "bot版本"},
+	}
+
+	zap.S().Debugf("set bot command %+v", commands)
+
+	if err := B.SetCommands(commands); err != nil {
+		zap.S().Errorw("set bot commands failed", "error", err.Error())
+	}
+}
+
+func setHandle() {
+	B.Handle("/help", helpCmdCtr)
+	B.Handle("/version", versionCmdCtr)
 }

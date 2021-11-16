@@ -45,6 +45,9 @@ func init() {
 		panic(fmt.Errorf("fatal error on reading config file: %s", err))
 	}
 
+	Socks5 = viper.GetString("socks5")
+	BotToken = viper.GetString("bot_token")
+
 	if viper.IsSet("sqlite.path") {
 		SQLitePath = viper.GetString("sqlite.path")
 	} else {
