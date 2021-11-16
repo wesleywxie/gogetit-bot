@@ -6,6 +6,8 @@ require (
 	github.com/jinzhu/gorm v1.9.16
 	github.com/spf13/viper v1.9.0
 	go.uber.org/zap v1.19.1
+	golang.org/x/net v0.0.0-20210503060351-7fd8e65b6420
+	gopkg.in/tucnak/telebot.v3 v3.0.0-20211108093419-844466d6faf3
 	moul.io/zapgorm v1.1.3
 )
 
@@ -17,6 +19,7 @@ require (
 	github.com/mattn/go-sqlite3 v1.14.0 // indirect
 	github.com/mitchellh/mapstructure v1.4.2 // indirect
 	github.com/pelletier/go-toml v1.9.4 // indirect
+	github.com/pkg/errors v0.8.1 // indirect
 	github.com/spf13/afero v1.6.0 // indirect
 	github.com/spf13/cast v1.4.1 // indirect
 	github.com/spf13/jwalterweatherman v1.1.0 // indirect

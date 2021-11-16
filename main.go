@@ -2,6 +2,7 @@ package main
 
 import (
 	_ "github.com/jinzhu/gorm/dialects/sqlite"
+	"github.com/wesleywxie/gogetit/internal/bot"
 	_ "github.com/wesleywxie/gogetit/internal/log"
 	"github.com/wesleywxie/gogetit/internal/model"
 	"go.uber.org/zap"
@@ -17,12 +18,13 @@ func init() {
 
 func main() {
 	model.InitDB()
-	go handleSignal()
+	go handleShutdownSignal()
+	bot.Start()
 }
 
-func handleSignal() {
+func handleShutdownSignal() {
 	c := make(chan os.Signal)
-	signal.Notify(c, os.Interrupt, os.Kill, syscall.SIGINT, syscall.SIGQUIT, syscall.SIGTERM)
+	signal.Notify(c, os.Interrupt, os.Kill, syscall.SIGHUP, syscall.SIGINT, syscall.SIGTERM, syscall.SIGQUIT)
 
 	<-c
 
@@ -30,7 +32,7 @@ func handleSignal() {
 	os.Exit(0)
 }
 
-
 func gracefullyShutdown() {
+	model.Disconnect()
 	zap.S().Infof("Shutting down gracefully...")
 }

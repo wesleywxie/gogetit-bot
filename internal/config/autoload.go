@@ -50,7 +50,7 @@ func init() {
 	} else {
 		SQLitePath = filepath.Join(workDir, "data.db")
 	}
-	log.Println("DB Path:", SQLitePath)
+	log.Printf("initialize SQLite DB with path: %v\n", SQLitePath)
 	// 判断并创建SQLite目录
 	dir := path.Dir(SQLitePath)
 	_, err = os.Stat(dir)

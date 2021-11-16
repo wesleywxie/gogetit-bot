@@ -3,6 +3,7 @@ package config
 import (
 	"fmt"
 	"github.com/spf13/viper"
+	tb "gopkg.in/tucnak/telebot.v3"
 )
 
 
@@ -14,7 +15,19 @@ var (
 	date    = "unknown"
 
 	ProjectName          string = "gogetit"
+	Socks5               string
+
+	// SQLitePath relative path to SQLite db file
 	SQLitePath           string
+
+
+	// BotToken telegram bot token
+	BotToken             string
+	// TelegramEndpoint telegram api endpoint, empty by default
+	TelegramEndpoint 	 string = tb.DefaultApiURL
+
+	// AllowUsers 允许使用bot的用户
+	AllowUsers []int64
 
 	RunMode RunType = ReleaseMode
 

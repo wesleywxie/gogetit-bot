@@ -1,11 +1,12 @@
 package model
 
 import (
+	"fmt"
 	"github.com/jinzhu/gorm"
-	"github.com/wesleywxie/gogetit/internal/log"
-	"moul.io/zapgorm"
 	"github.com/wesleywxie/gogetit/internal/config"
+	"github.com/wesleywxie/gogetit/internal/log"
 	"go.uber.org/zap"
+	"moul.io/zapgorm"
 )
 
 var db *gorm.DB
@@ -26,6 +27,14 @@ func connectDB() {
 	db, err = gorm.Open("sqlite3", config.SQLitePath)
 	if err != nil {
 		zap.S().Fatalf("connect db failed, err: %+v", err)
+	}
+}
+
+// Disconnect disconnects from the database.
+func Disconnect() {
+	err := db.Close()
+	if err != nil {
+		fmt.Printf("fatal error while closing db: %v", err)
 	}
 }
 
