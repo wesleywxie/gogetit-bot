@@ -1,14 +1,14 @@
 package main
 
 import (
+	_ "github.com/jinzhu/gorm/dialects/sqlite"
 	_ "github.com/wesleywxie/gogetit/internal/log"
 	"github.com/wesleywxie/gogetit/internal/model"
 	"go.uber.org/zap"
 	"os"
 	"os/signal"
 	"syscall"
-	_ "github.com/jinzhu/gorm/dialects/sqlite"
-	)
+)
 
 func init() {
 	// Initialization Script here
