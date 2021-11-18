@@ -75,6 +75,7 @@ func setCommands() {
 }
 
 func setHandle() {
+	B.Handle("/start", startCmdCtr)
 	B.Handle("/help", helpCmdCtr)
 	B.Handle("/version", versionCmdCtr)
 }

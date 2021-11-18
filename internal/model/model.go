@@ -7,9 +7,17 @@ import (
 	"github.com/wesleywxie/gogetit/internal/log"
 	"go.uber.org/zap"
 	"moul.io/zapgorm"
+	"time"
 )
 
 var db *gorm.DB
+
+//EditTime timestamp
+type EditTime struct {
+	CreatedAt time.Time
+	UpdatedAt time.Time
+}
+
 
 // InitDB init db object
 func InitDB() {
@@ -46,5 +54,14 @@ func configDB() {
 }
 
 func updateTable() {
-	// Put tables here
+	createOrUpdateTable(&User{})
+}
+
+// createOrUpdateTable create table or Migrate table
+func createOrUpdateTable(model interface{}) {
+	if !db.HasTable(model) {
+		db.CreateTable(model)
+	} else {
+		db.AutoMigrate(model)
+	}
 }

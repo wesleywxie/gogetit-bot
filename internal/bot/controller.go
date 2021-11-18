@@ -1,9 +1,18 @@
 package bot
 
 import (
+	"fmt"
 	"github.com/wesleywxie/gogetit/internal/config"
+	"github.com/wesleywxie/gogetit/internal/model"
+	"go.uber.org/zap"
 	tb "gopkg.in/tucnak/telebot.v3"
 )
+
+func startCmdCtr(c tb.Context) error {
+	user, _ := model.FindOrCreateUserByTelegramID(c.Chat().ID)
+	zap.S().Infof("/start user_id: %d telegram_id: %d", user.ID, user.TelegramID)
+	return c.Send(fmt.Sprintf("你好，欢迎使用%v。", config.ProjectName))
+}
 
 func helpCmdCtr(c tb.Context) error {
 	message := `
