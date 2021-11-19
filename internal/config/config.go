@@ -23,6 +23,7 @@ var (
 
 	// BotToken telegram bot token
 	BotToken             string
+
 	// TelegramEndpoint telegram api endpoint, empty by default
 	TelegramEndpoint 	 string = tb.DefaultApiURL
 

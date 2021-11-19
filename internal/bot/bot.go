@@ -20,17 +20,17 @@ func init() {
 
 	poller := &tb.LongPoller{Timeout: 10 * time.Second}
 
-	spamProtected := tb.NewMiddlewarePoller(poller, func(upd *tb.Update) bool {
-		if !isUserAllowed(upd) {
-			// 检查用户是否可以使用bot
-			return false
-		}
-
-		if !CheckAdmin(upd) {
-			return false
-		}
-		return true
-	})
+	//spamProtected := tb.NewMiddlewarePoller(poller, func(upd *tb.Update) bool {
+	//	if !isUserAllowed(upd) {
+	//		// 检查用户是否可以使用bot
+	//		return false
+	//	}
+	//
+	//	if !CheckAdmin(upd) {
+	//		return false
+	//	}
+	//	return true
+	//})
 
 	log.Printf("init telegram bot, token=%v, endpoint=%v", config.BotToken, config.TelegramEndpoint)
 
@@ -40,7 +40,7 @@ func init() {
 	B, err = tb.NewBot(tb.Settings{
 		URL:    config.TelegramEndpoint,
 		Token:  config.BotToken,
-		Poller: spamProtected,
+		Poller: poller,
 		Client: util.HttpClient,
 	})
 
@@ -63,6 +63,7 @@ func Start() {
 func setCommands() {
 	// 设置bot命令提示信息
 	commands := []tb.Command{
+		{Text: "listen", Description: "监听"},
 		{Text: "help", Description: "使用帮助"},
 		{Text: "version", Description: "bot版本"},
 	}
@@ -76,6 +77,13 @@ func setCommands() {
 
 func setHandle() {
 	B.Handle("/start", startCmdCtr)
+	B.Handle("/listen", listenCmdCtr)
 	B.Handle("/help", helpCmdCtr)
 	B.Handle("/version", versionCmdCtr)
+
+	B.Handle(tb.OnChannelPost, func (c tb.Context) error {
+		// channel posts only
+		zap.S().Debugf("received channel message: %v", c.Message())
+		return nil
+	})
 }
