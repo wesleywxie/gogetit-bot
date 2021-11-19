@@ -55,10 +55,30 @@ func registerChannel(c tb.Context, channel *tb.Chat, index int) (err error) {
 	}
 
 	zap.S().Infof("%d subscribe [%d] at %d", c.Chat().ID, subscribe.ChannelID, subscribe.MessageIndex)
-
-
 	msg, err = B.Edit(msg, fmt.Sprintf("频道 %v 订阅成功", channel.Title))
+	return err
+}
 
+func unregisterChannel(c tb.Context, channel *tb.Chat) (err error) {
+	msg, _ := B.Send(c.Chat(),"处理中...")
+	channelID := channel.ID
+	subscribe, err := model.GetSubscribeByChannel(channelID, c.Chat().ID)
+
+	if subscribe == nil {
+		zap.S().Warnf("error when unsubscribing channel %d, err=%v", channelID, err.Error())
+		_, err = B.Edit(msg, "未订阅该频道")
+	} else {
+		err = model.UnregisterChannel(channelID, c.Chat().ID)
+		if err == nil {
+			_, err = B.Edit(
+				msg,
+				fmt.Sprintf("频道 %v 退订成功！", channel.Title),
+			)
+			zap.S().Infof("%d unsubscribe [%d]%s", c.Chat().ID, channelID, channel.Title)
+		} else {
+			_, err = B.Edit(msg, err.Error())
+		}
+	}
 	return err
 }
 

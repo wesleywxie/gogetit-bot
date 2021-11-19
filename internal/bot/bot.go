@@ -63,7 +63,8 @@ func Start() {
 func setCommands() {
 	// 设置bot命令提示信息
 	commands := []tb.Command{
-		{Text: "listen", Description: "监听"},
+		{Text: "sub", Description: "订阅"},
+		{Text: "unsub", Description: "退订"},
 		{Text: "help", Description: "使用帮助"},
 		{Text: "version", Description: "bot版本"},
 	}
@@ -77,7 +78,8 @@ func setCommands() {
 
 func setHandle() {
 	B.Handle("/start", startCmdCtr)
-	B.Handle("/listen", listenCmdCtr)
+	B.Handle("/sub", subCmdCtr)
+	B.Handle("/unsub", unsubCmdCtr)
 	B.Handle("/help", helpCmdCtr)
 	B.Handle("/version", versionCmdCtr)
 

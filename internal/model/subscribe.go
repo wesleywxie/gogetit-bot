@@ -13,6 +13,15 @@ type Subscribe struct {
 	EditTime
 }
 
+func GetSubscribeByChannel(channelID int64, userID int64) (*Subscribe, error) {
+	var subscribe Subscribe
+
+	if err := db.Where("channel_id=? and user_id=?", channelID, userID).Find(&subscribe).Error; err != nil {
+		return nil, err
+	}
+	return &subscribe, nil
+}
+
 func RegisterChannel(channelID int64, userID int64, messageIndex uint) (*Subscribe, error) {
 	var subscribe Subscribe
 
@@ -30,3 +39,12 @@ func RegisterChannel(channelID int64, userID int64, messageIndex uint) (*Subscri
 
 	return &subscribe, nil
 }
+
+
+func UnregisterChannel(channelID int64, userID int64) error {
+	var sub Subscribe
+	db.Where("channel_id=? and user_id=?", channelID, userID).First(&sub)
+	db.Delete(&sub)
+	return nil
+}
+
