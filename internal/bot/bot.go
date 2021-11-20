@@ -20,18 +20,6 @@ func init() {
 
 	poller := &tb.LongPoller{Timeout: 10 * time.Second}
 
-	//spamProtected := tb.NewMiddlewarePoller(poller, func(upd *tb.Update) bool {
-	//	if !isUserAllowed(upd) {
-	//		// 检查用户是否可以使用bot
-	//		return false
-	//	}
-	//
-	//	if !CheckAdmin(upd) {
-	//		return false
-	//	}
-	//	return true
-	//})
-
 	log.Printf("init telegram bot, token=%v, endpoint=%v", config.BotToken, config.TelegramEndpoint)
 
 	// create bot
@@ -65,6 +53,7 @@ func setCommands() {
 	commands := []tb.Command{
 		{Text: "sub", Description: "订阅"},
 		{Text: "unsub", Description: "退订"},
+		{Text: "list", Description: "列出所有订阅"},
 		{Text: "help", Description: "使用帮助"},
 		{Text: "version", Description: "bot版本"},
 	}
@@ -80,6 +69,7 @@ func setHandle() {
 	B.Handle("/start", startCmdCtr)
 	B.Handle("/sub", subCmdCtr)
 	B.Handle("/unsub", unsubCmdCtr)
+	B.Handle("/list", listCmdCtr)
 	B.Handle("/help", helpCmdCtr)
 	B.Handle("/version", versionCmdCtr)
 

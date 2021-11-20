@@ -27,9 +27,6 @@ var (
 	// TelegramEndpoint telegram api endpoint, empty by default
 	TelegramEndpoint 	 string = tb.DefaultApiURL
 
-	// AllowUsers 允许使用bot的用户
-	AllowUsers []int64
-
 	RunMode RunType = ReleaseMode
 
 	// DBLogMode 是否打印数据库日志

@@ -48,11 +48,42 @@ func unsubCmdCtr(c tb.Context) error {
 	return nil
 }
 
+func listCmdCtr(c tb.Context) error {
+	userID := c.Chat().ID
+	user, err := model.FindOrCreateUserByTelegramID(userID)
+	if err != nil {
+		zap.S().Warnw("error while retrieving subscriptions",
+			"userID", userID,
+			"error", err.Error())
+		return c.Send(fmt.Sprintf("当前订阅列表为空"))
+	}
+
+	subscriptions, err := user.GetSubscriptions()
+	if err != nil {
+		zap.S().Warnw("error while retrieving subscriptions",
+			"userID", userID,
+			"error", err.Error())
+		return c.Send(fmt.Sprintf("当前订阅列表为空"))
+	}
+
+	rspMessage := ""
+	if len(subscriptions) == 0 {
+		rspMessage = "当前订阅列表为空"
+	} else {
+		rspMessage = "当前订阅列表：\n"
+		for _, sub := range subscriptions {
+			rspMessage += fmt.Sprintf("[%d] - %s\n", sub.ID, sub.Title)
+		}
+	}
+	return c.Send(rspMessage)
+}
+
 func helpCmdCtr(c tb.Context) error {
 	message := `
 命令：
 /sub @{ChannelID} {MessageIndex} or https://t.me/c/{ChannelID}/{MessageIndex} 
 /unsub @{ChannelID} or https://t.me/c/{ChannelID}/ 
+/list 列出所有订阅 
 /help 帮助
 /version 查看当前bot版本
 详细使用方法请看：https://github.com/wesleywxie/gogetit
