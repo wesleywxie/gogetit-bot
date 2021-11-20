@@ -19,7 +19,17 @@ func init() {
 	}
 
 	poller := &tb.LongPoller{Timeout: 10 * time.Second}
+	spamProtected := tb.NewMiddlewarePoller(poller, func(upd *tb.Update) bool {
+		if !isUserAllowed(upd) {
+			// 检查用户是否可以使用bot
+			return false
+		}
 
+		if !CheckAdmin(upd) {
+			return false
+		}
+		return true
+	})
 	log.Printf("init telegram bot, token=%v, endpoint=%v", config.BotToken, config.TelegramEndpoint)
 
 	// create bot
@@ -28,7 +38,7 @@ func init() {
 	B, err = tb.NewBot(tb.Settings{
 		URL:    config.TelegramEndpoint,
 		Token:  config.BotToken,
-		Poller: poller,
+		Poller: spamProtected,
 		Client: util.HttpClient,
 	})
 
@@ -72,10 +82,4 @@ func setHandle() {
 	B.Handle("/list", listCmdCtr)
 	B.Handle("/help", helpCmdCtr)
 	B.Handle("/version", versionCmdCtr)
-
-	B.Handle(tb.OnChannelPost, func (c tb.Context) error {
-		// channel posts only
-		zap.S().Debugf("received channel message: %v", c.Message())
-		return nil
-	})
 }
