@@ -5,6 +5,7 @@ import (
 	"github.com/wesleywxie/gogetit/internal/bot"
 	_ "github.com/wesleywxie/gogetit/internal/log"
 	"github.com/wesleywxie/gogetit/internal/model"
+	"github.com/wesleywxie/gogetit/internal/task"
 	"go.uber.org/zap"
 	"os"
 	"os/signal"
@@ -18,6 +19,7 @@ func init() {
 
 func main() {
 	model.InitDB()
+	task.StartTasks()
 	go handleShutdownSignal()
 	bot.Start()
 }
@@ -33,6 +35,7 @@ func handleShutdownSignal() {
 }
 
 func gracefullyShutdown() {
+	task.StopTasks()
 	model.Disconnect()
 	zap.S().Infof("Shutting down gracefully...")
 }

@@ -67,6 +67,14 @@ func init() {
 	if viper.IsSet("log.db_log") {
 		DBLogMode = viper.GetBool("log.db_log")
 	}
+
+	if viper.IsSet(".client.app_id") {
+		ClientAppID = viper.GetInt(".client.app_id")
+	}
+
+	if viper.IsSet(".client.app_hash") {
+		ClientAppHash = viper.GetString(".client.app_hash")
+	}
 }
 
 func isInTests() bool {
