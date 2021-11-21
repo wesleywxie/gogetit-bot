@@ -55,7 +55,6 @@ func configDB() {
 
 func updateTable() {
 	createOrUpdateTable(&User{})
-	createOrUpdateTable(&Subscribe{})
 }
 
 // createOrUpdateTable create table or Migrate table

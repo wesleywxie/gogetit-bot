@@ -17,9 +17,3 @@ func FindOrCreateUserByTelegramID(telegramID int64) (*User, error) {
 
 	return &user, nil
 }
-
-
-// GetSubscriptions get user subscriptions
-func (user *User) GetSubscriptions() ([]Subscribe, error) {
-	return GetSubscriptionsByUserID(user.TelegramID)
-}
