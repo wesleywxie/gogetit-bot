@@ -13,7 +13,7 @@ func BuildYtdlpArgs(url, filename string) []string {
 	args := make([]string, 0, 7)
 	args = append(args, "--downloader", "aria2c")
 	args = append(args, "--downloader-args", fmt.Sprintf("-x %d -k 1M", config.MaxThreadNum))
-	args = append(args, "-o", filename)
+	args = append(args, "--output", filename)
 	if len(config.OutputDir) > 0 {
 		args = append(args, "--paths", config.OutputDir)
 	}
@@ -29,7 +29,7 @@ func BuildYtdlpArgs(url, filename string) []string {
 func GetYtdlpFilename(url string) []string {
 	args := []string {
 		"--print", "filename",
-		"--o", "%(title)s.%(ext)s",
+		"--output", "%(title)s.%(ext)s",
 		"--restrict-filenames",
 		"--trim-filenames", "50",
 		url,
