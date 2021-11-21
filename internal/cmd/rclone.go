@@ -22,7 +22,7 @@ func Sync(c tb.Context, msg *tb.Message, download chan string) {
 		command := "rclone"
 		args := []string {
 			"move", "--ignore-existing", file,
-			fmt.Sprintf("%s:%s/%s", config.AutoUploadDrive, config.ProjectName, dir),
+			fmt.Sprintf("%s:%s/%s/%s", config.AutoUploadDrive, config.AutoUploadDir, config.ProjectName, dir),
 		}
 
 		err := proceed(command, args...)

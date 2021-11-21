@@ -91,6 +91,10 @@ func init() {
 	if viper.IsSet("upload.auto_upload_drive") {
 		AutoUploadDrive = viper.GetString("upload.auto_upload_drive")
 	}
+
+	if viper.IsSet("upload.auto_upload_dir") {
+		AutoUploadDir = viper.GetString("upload.auto_upload_dir")
+	}
 }
 
 func isInTests() bool {

@@ -9,6 +9,7 @@ dl:
 upload:
   auto_upload: true_if_you_want_to_auto_upload_to_cloud_drive_with_rclone
   auto_upload_drive: rclone_drive_name
+  auto_upload_dir: your_cloud_drive_upload_dir
 
 log:
   level: debug

@@ -36,6 +36,8 @@ var (
 	AutoUpload           bool = false
 	// AutoUploadDrive driver name for rclone to upload to
 	AutoUploadDrive		 string
+	// AutoUploadDir dir for rclone to upload to
+	AutoUploadDir		 string
 
 	RunMode = ReleaseMode
 
