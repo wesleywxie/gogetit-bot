@@ -4,6 +4,7 @@ import (
 	"github.com/wesleywxie/gogetit/internal/config"
 	"go.uber.org/zap"
 	tb "gopkg.in/tucnak/telebot.v3"
+	"regexp"
 )
 
 
@@ -79,4 +80,24 @@ func HasAdminType(t tb.ChatType) bool {
 		}
 	}
 	return false
+}
+
+var relaxUrlMatcher = regexp.MustCompile(`^(https?://.*?)($| )`)
+
+// GetHyperlinkFromMessage get hyperlink from message mention
+func GetHyperlinkFromMessage(m *tb.Message) (url string) {
+	for _, entity := range m.Entities {
+		if entity.Type == tb.EntityURL {
+			if url == "" {
+				url = m.Text[entity.Offset : entity.Offset + entity.Length]
+			}
+		}
+	}
+
+	var payloadMatching = relaxUrlMatcher.FindStringSubmatch(m.Payload)
+	if url == "" && len(payloadMatching) > 0 && payloadMatching[0] != "" {
+		url = payloadMatching[0]
+	}
+
+	return
 }

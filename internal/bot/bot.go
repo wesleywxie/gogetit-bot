@@ -76,6 +76,7 @@ func setCommands() {
 
 func setHandle() {
 	B.Handle("/start", startCmdCtr)
+	B.Handle("/ytb", ytbCmdCtr)
 	B.Handle("/help", helpCmdCtr)
 	B.Handle("/version", versionCmdCtr)
 }
