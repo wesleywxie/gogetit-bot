@@ -1,6 +1,11 @@
 package task
 
-import "go.uber.org/zap"
+import (
+	"bytes"
+	"go.uber.org/zap"
+	"io"
+	"os/exec"
+)
 
 var (
 	taskList []Task
@@ -34,5 +39,19 @@ func StopTasks() {
 	}
 }
 
+func Proceed(cmd *exec.Cmd) error {
+	var stdoutBuf, stderrBuf bytes.Buffer
+	cmd.Stdout = io.MultiWriter(&stdoutBuf)
+	cmd.Stderr = io.MultiWriter(&stderrBuf)
 
+	err := cmd.Run()
+	outStr, errStr := string(stdoutBuf.Bytes()), string(stderrBuf.Bytes())
 
+	if err != nil {
+		zap.S().Debugf("Finished command with error output\n %v", errStr)
+	}
+
+	zap.S().Debugf("Finished command with output\n %v", outStr)
+
+	return err
+}

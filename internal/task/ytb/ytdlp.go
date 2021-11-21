@@ -1,11 +1,10 @@
-package task
+package ytb
 
 import (
-	"bytes"
 	"fmt"
 	"github.com/wesleywxie/gogetit/internal/config"
+	"github.com/wesleywxie/gogetit/internal/task"
 	"go.uber.org/zap"
-	"io"
 	"os/exec"
 	"strings"
 )
@@ -31,19 +30,7 @@ func ExecDownload(url, filename string) (err error) {
 	zap.S().Debugf("Executing command yt-dlp %v", args)
 	cmd := exec.Command("yt-dlp", args...)
 
-	var stdoutBuf, stderrBuf bytes.Buffer
-	cmd.Stdout = io.MultiWriter(&stdoutBuf)
-	cmd.Stderr = io.MultiWriter(&stderrBuf)
-
-	err = cmd.Run()
-	outStr, errStr := string(stdoutBuf.Bytes()), string(stderrBuf.Bytes())
-
-	if err != nil {
-		zap.S().Debugf("Finished command with error output\n %v", errStr)
-	}
-
-	zap.S().Debugf("Finished command with output\n %v", outStr)
-	return
+	return task.Proceed(cmd)
 }
 
 

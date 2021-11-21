@@ -5,6 +5,7 @@ import (
 	"github.com/wesleywxie/gogetit/internal/config"
 	"github.com/wesleywxie/gogetit/internal/model"
 	"github.com/wesleywxie/gogetit/internal/task"
+	"github.com/wesleywxie/gogetit/internal/task/ytb"
 	"go.uber.org/zap"
 	tb "gopkg.in/tucnak/telebot.v3"
 )
@@ -22,7 +23,8 @@ func ytbCmdCtr(c tb.Context) error {
 		"url", url,
 		)
 
-	filename, err := task.GetFilename(url)
+	// generate filename
+	filename, err := ytb.GetFilename(url)
 	if err != nil {
 		zap.S().Warnw("Failed to extract filename",
 			"url", url,
@@ -31,7 +33,8 @@ func ytbCmdCtr(c tb.Context) error {
 		return c.Send("下载失败")
 	}
 
-	err = task.ExecDownload(url, filename)
+	// execute download and store
+	err = ytb.ExecDownload(url, filename)
 	if err != nil {
 		zap.S().Warnw("Failed to download",
 			"url", url,
@@ -39,6 +42,19 @@ func ytbCmdCtr(c tb.Context) error {
 		)
 		return c.Send("下载失败")
 	}
+	
+	if config.AutoUpload {
+		// upload with rclone
+		err = task.Sync(filename)
+		if err != nil {
+			zap.S().Warnw("Failed to sync",
+				"filename", filename,
+				"error", err.Error(),
+			)
+			return c.Send("下载失败")
+		}
+	}
+
 	return c.Send("下载完成")
 }
 
