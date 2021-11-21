@@ -1,12 +1,14 @@
 package bot
 
 import (
+	"bytes"
 	"fmt"
 	"github.com/wesleywxie/gogetit/internal/config"
 	"github.com/wesleywxie/gogetit/internal/model"
 	"github.com/wesleywxie/gogetit/internal/util"
 	"go.uber.org/zap"
 	tb "gopkg.in/tucnak/telebot.v3"
+	"io"
 	"os"
 	"os/exec"
 )
@@ -21,15 +23,23 @@ func ytbCmdCtr(c tb.Context) error {
 	url := GetHyperlinkFromMessage(c.Message())
 
 	zap.S().Debugw("Received ytb download command",
-		"url", url)
+		"url", url,
+		)
 
 	args := util.BuildYtdlpArgs(url)
 
+	zap.S().Debugf("Executing command yt-dlp %v", args)
 	cmd := exec.Command("yt-dlp", args...)
-	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
+
+	var stdoutBuf, stderrBuf bytes.Buffer
+	cmd.Stdout = io.MultiWriter(os.Stdout, &stdoutBuf)
+	cmd.Stderr = io.MultiWriter(os.Stderr, &stderrBuf)
+
 	err := cmd.Run()
+	outStr, errStr := string(stdoutBuf.Bytes()), string(stderrBuf.Bytes())
+
 	if err != nil {
+		zap.S().Debugf("Finished command with error output\n %v", errStr)
 		zap.S().Warnw("Failed to download",
 			"url", url,
 			"error", err.Error(),
@@ -37,6 +47,7 @@ func ytbCmdCtr(c tb.Context) error {
 		return c.Send("下载失败")
 	}
 
+	zap.S().Debugf("Finished command with output\n %v", outStr)
 	return c.Send("下载完成")
 }
 
