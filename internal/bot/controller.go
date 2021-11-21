@@ -29,7 +29,7 @@ func ytbCmdCtr(c tb.Context) error {
 	args := util.GetYtdlpFilename(url)
 	cmd := exec.Command("yt-dlp", args...)
 	out, err := cmd.CombinedOutput()
-	zap.S().Debug(out)
+	zap.S().Debug(string(out))
 	if err != nil {
 		zap.S().Warnw("Failed to extract filename",
 			"url", url,
