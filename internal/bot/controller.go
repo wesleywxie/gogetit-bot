@@ -11,6 +11,7 @@ import (
 	"io"
 	"os"
 	"os/exec"
+	"strings"
 )
 
 func startCmdCtr(c tb.Context) error {
@@ -37,7 +38,7 @@ func ytbCmdCtr(c tb.Context) error {
 		)
 		return c.Send("下载失败")
 	}
-	filename := string(out)
+	filename := strings.TrimSuffix(string(out), "\n")
 
 	args = util.BuildYtdlpArgs(url, filename)
 
