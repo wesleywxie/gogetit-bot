@@ -23,9 +23,10 @@ func ytbCmdCtr(c tb.Context) error {
 
 	cmd := exec.Command("/opt/homebrew/bin/yt-dlp",
 		"--downloader", "aria2c",
-		"--downloader-args", "-x 16 -k 1M",
-		"--cookies", "~/Downloads/pornhub.com_cookies.txt",
-		"--user-agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.69 Safari/537.36",
+		"--paths", config.OutputDir,
+		"--downloader-args", fmt.Sprintf("-x %d -k 1M", config.MaxThreadNum),
+		"--cookies", config.CookieFile,
+		"--user-agent", config.UserAgent,
 		url,
 		)
 

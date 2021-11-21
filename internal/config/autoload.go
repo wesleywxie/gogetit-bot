@@ -67,6 +67,30 @@ func init() {
 	if viper.IsSet("log.db_log") {
 		DBLogMode = viper.GetBool("log.db_log")
 	}
+
+	if viper.IsSet("dl.user_agent") {
+		UserAgent = viper.GetString("dl.user_agent")
+	}
+
+	if viper.IsSet("dl.output_dir") {
+		OutputDir = viper.GetString("dl.output_dir")
+	}
+
+	if viper.IsSet("dl.cookie_file") {
+		CookieFile = viper.GetString("dl.cookie_file")
+	}
+
+	if viper.IsSet("dl.max_thread_num") {
+		MaxThreadNum = viper.GetInt("dl.max_thread_num")
+	}
+
+	if viper.IsSet("upload.auto_upload") {
+		AutoUpload = viper.GetBool("upload.auto_upload")
+	}
+
+	if viper.IsSet("upload.auto_upload_drive") {
+		AutoUploadDrive = viper.GetString("upload.auto_upload_drive")
+	}
 }
 
 func isInTests() bool {

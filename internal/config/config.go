@@ -16,24 +16,34 @@ var (
 
 	ProjectName          string = "gogetit"
 	Socks5               string
-
 	// SQLitePath relative path to SQLite db file
 	SQLitePath           string
-
-
 	// BotToken telegram bot token
 	BotToken             string
-
 	// TelegramEndpoint telegram api endpoint, empty by default
 	TelegramEndpoint 	 string = tb.DefaultApiURL
 
-	RunMode RunType = ReleaseMode
+	// UserAgent as the user agent for downloading task
+	UserAgent 			 string
+	// OutputDir folder to store downloaded files
+	OutputDir 			 string
+	// CookieFile cookie file exported for specific website
+	CookieFile 			 string
+	// MaxThreadNum max thread count for aria2c
+	MaxThreadNum 		 int
+
+	// AutoUpload when download finished
+	AutoUpload           bool = false
+	// AutoUploadDrive driver name for rclone to upload to
+	AutoUploadDrive		 string
+
+	RunMode = ReleaseMode
 
 	// AllowUsers 允许使用bot的用户
 	AllowUsers []int64
 
 	// DBLogMode 是否打印数据库日志
-	DBLogMode bool = false
+	DBLogMode = false
 )
 
 const (

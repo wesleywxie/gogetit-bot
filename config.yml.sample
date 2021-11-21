@@ -1,6 +1,18 @@
+bot_token: YOUR_BOT_TOKEN
+
+dl:
+  output_dir: DIR_TO_STORE_DOWNLOAD_FILES
+  user_agent: UA_FROM_YOUR_BROWSER
+  cookie_file: EXPORTED_COOKIE_IF_ANY
+  max_thread_num: MAX_NUM_OF_THREAD
+
+upload:
+  auto_upload: true_if_you_want_to_auto_upload_to_cloud_drive_with_rclone
+  auto_upload_drive: rclone_drive_name
+
 log:
-  level: release
-  db_log: false # 打印数据库日志，false则只会打印数据库错误日志
+  level: debug
+  db_log: true # 打印数据库日志，false则只会打印数据库错误日志
 
 #  file: ./gogetit.log
 
