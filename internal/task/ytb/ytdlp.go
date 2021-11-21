@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/wesleywxie/gogetit/internal/config"
 	"github.com/wesleywxie/gogetit/internal/task"
-	"go.uber.org/zap"
 	"os/exec"
 	"strings"
 )
@@ -25,16 +24,6 @@ func GetFilename(url string) (filename string, err error) {
 
 
 func ExecDownload(url, filename string) (err error) {
-	args := buildDownloadArgs(url, filename)
-
-	zap.S().Debugf("Executing command yt-dlp %v", args)
-	cmd := exec.Command("yt-dlp", args...)
-
-	return task.Proceed(cmd)
-}
-
-
-func buildDownloadArgs(url, filename string) []string {
 	args := make([]string, 0, 7)
 	args = append(args, "--downloader", "aria2c")
 	args = append(args, "--downloader-args", fmt.Sprintf("-x %d -k 1M", config.MaxThreadNum))
@@ -48,5 +37,9 @@ func buildDownloadArgs(url, filename string) []string {
 	if len(config.UserAgent) > 0 {
 		args = append(args, "--user-agent", config.UserAgent)
 	}
-	return append(args, url)
+	args = append(args, url)
+
+	command := "yt-dlp"
+
+	return task.Proceed(command, args...)
 }

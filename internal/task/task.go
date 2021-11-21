@@ -39,7 +39,10 @@ func StopTasks() {
 	}
 }
 
-func Proceed(cmd *exec.Cmd) error {
+func Proceed(command string, args... string) error {
+	cmd := exec.Command(command, args...)
+
+	zap.S().Debugf("Executing command %s with args %v", command, args)
 	var stdoutBuf, stderrBuf bytes.Buffer
 	cmd.Stdout = io.MultiWriter(&stdoutBuf)
 	cmd.Stderr = io.MultiWriter(&stderrBuf)
