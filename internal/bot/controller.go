@@ -16,46 +16,28 @@ func startCmdCtr(c tb.Context) error {
 	return c.Send(fmt.Sprintf("你好，欢迎使用%v。", config.ProjectName))
 }
 
-func ytbCmdCtr(c tb.Context) error {
+func ytbCmdCtr(c tb.Context) (err error) {
 	url := GetHyperlinkFromMessage(c.Message())
 
 	zap.S().Debugw("Received ytb download command",
 		"url", url,
 		)
 
+	gen := make(chan string)
+	download := make(chan string)
+
+	msg, err := B.Send(c.Chat(), "正在下载...")
+
 	// generate filename
-	filename, err := ytb.GetFilename(url)
-	if err != nil {
-		zap.S().Warnw("Failed to extract filename",
-			"url", url,
-			"error", err.Error(),
-		)
-		return c.Send("下载失败")
-	}
+	go ytb.GetFilename(c, msg, url, gen)
 
 	// execute download and store
-	err = ytb.ExecDownload(url, filename)
-	if err != nil {
-		zap.S().Warnw("Failed to download",
-			"url", url,
-			"error", err.Error(),
-		)
-		return c.Send("下载失败")
-	}
-	
-	if config.AutoUpload {
-		// upload with rclone
-		err = task.Sync(filename)
-		if err != nil {
-			zap.S().Warnw("Failed to sync",
-				"filename", filename,
-				"error", err.Error(),
-			)
-			return c.Send("下载失败")
-		}
-	}
+	go ytb.ExecDownload(c, msg, url, gen, download)
 
-	return c.Send("下载完成")
+	// upload with rclone
+	go task.Sync(c, msg, download)
+
+	return
 }
 
 func helpCmdCtr(c tb.Context) error {
