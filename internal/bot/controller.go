@@ -24,7 +24,7 @@ func ytbCmdCtr(c tb.Context) error {
 
 	args := util.BuildYtdlpArgs(url)
 
-	cmd := exec.Command("/opt/homebrew/bin/yt-dlp", args...)
+	cmd := exec.Command("yt-dlp", args...)
 	err := cmd.Run()
 	if err != nil {
 		zap.S().Warnw("Failed to download",
