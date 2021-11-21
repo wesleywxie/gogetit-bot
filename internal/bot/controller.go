@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/wesleywxie/gogetit/internal/config"
 	"github.com/wesleywxie/gogetit/internal/model"
+	"github.com/wesleywxie/gogetit/internal/util"
 	"go.uber.org/zap"
 	tb "gopkg.in/tucnak/telebot.v3"
 	"os/exec"
@@ -21,15 +22,9 @@ func ytbCmdCtr(c tb.Context) error {
 	zap.S().Debugw("Received ytb download command",
 		"url", url)
 
-	cmd := exec.Command("/opt/homebrew/bin/yt-dlp",
-		"--downloader", "aria2c",
-		"--paths", config.OutputDir,
-		"--downloader-args", fmt.Sprintf("-x %d -k 1M", config.MaxThreadNum),
-		"--cookies", config.CookieFile,
-		"--user-agent", config.UserAgent,
-		url,
-		)
+	args := util.BuildYtdlpArgs(url)
 
+	cmd := exec.Command("/opt/homebrew/bin/yt-dlp", args...)
 	err := cmd.Run()
 	if err != nil {
 		zap.S().Warnw("Failed to download",
