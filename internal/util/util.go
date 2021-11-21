@@ -10,7 +10,7 @@ func init() {
 }
 
 func BuildYtdlpArgs(url string) []string {
-	args := make([]string, 5)
+	args := make([]string, 0)
 	args = append(args, "--downloader", "aria2c")
 	args = append(args, "--downloader-args", fmt.Sprintf("-x %d -k 1M", config.MaxThreadNum))
 	if len(config.OutputDir) > 0 {
