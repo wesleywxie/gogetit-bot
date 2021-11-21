@@ -7,6 +7,7 @@ import (
 	"github.com/wesleywxie/gogetit/internal/util"
 	"go.uber.org/zap"
 	tb "gopkg.in/tucnak/telebot.v3"
+	"os"
 	"os/exec"
 )
 
@@ -25,6 +26,8 @@ func ytbCmdCtr(c tb.Context) error {
 	args := util.BuildYtdlpArgs(url)
 
 	cmd := exec.Command("yt-dlp", args...)
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
 	err := cmd.Run()
 	if err != nil {
 		zap.S().Warnw("Failed to download",
