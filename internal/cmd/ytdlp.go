@@ -1,9 +1,8 @@
-package ytb
+package cmd
 
 import (
 	"fmt"
 	"github.com/wesleywxie/gogetit/internal/config"
-	"github.com/wesleywxie/gogetit/internal/task"
 	"go.uber.org/zap"
 	tb "gopkg.in/tucnak/telebot.v3"
 	"os/exec"
@@ -57,7 +56,7 @@ func ExecDownload(c tb.Context, msg *tb.Message, url string, gen chan string, do
 
 		command := "yt-dlp"
 
-		err := task.Proceed(command, args...)
+		err := proceed(command, args...)
 
 		if err != nil {
 			zap.S().Warnw("Failed to download",

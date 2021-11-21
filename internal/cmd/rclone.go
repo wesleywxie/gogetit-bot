@@ -1,4 +1,4 @@
-package task
+package cmd
 
 import (
 	"fmt"
@@ -25,7 +25,7 @@ func Sync(c tb.Context, msg *tb.Message, download chan string) {
 			fmt.Sprintf("%s:%s/%s", config.AutoUploadDrive, config.ProjectName, dir),
 		}
 
-		err := Proceed(command, args...)
+		err := proceed(command, args...)
 
 		if err != nil {
 			_, _ = c.Bot().Edit(msg, fmt.Sprintf("上传失败 [%v]", filename))

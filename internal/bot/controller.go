@@ -2,10 +2,9 @@ package bot
 
 import (
 	"fmt"
+	"github.com/wesleywxie/gogetit/internal/cmd"
 	"github.com/wesleywxie/gogetit/internal/config"
 	"github.com/wesleywxie/gogetit/internal/model"
-	"github.com/wesleywxie/gogetit/internal/task"
-	"github.com/wesleywxie/gogetit/internal/task/ytb"
 	"go.uber.org/zap"
 	tb "gopkg.in/tucnak/telebot.v3"
 )
@@ -16,7 +15,7 @@ func startCmdCtr(c tb.Context) error {
 	return c.Send(fmt.Sprintf("你好，欢迎使用%v。", config.ProjectName))
 }
 
-func ytbCmdCtr(c tb.Context) (err error) {
+func dlCmdCtr(c tb.Context) (err error) {
 	url := GetHyperlinkFromMessage(c.Message())
 
 	zap.S().Debugw("Received ytb download command",
@@ -29,13 +28,13 @@ func ytbCmdCtr(c tb.Context) (err error) {
 	msg, err := B.Send(c.Chat(), "正在下载...")
 
 	// generate filename
-	go ytb.GetFilename(c, msg, url, gen)
+	go cmd.GetFilename(c, msg, url, gen)
 
 	// execute download and store
-	go ytb.ExecDownload(c, msg, url, gen, download)
+	go cmd.ExecDownload(c, msg, url, gen, download)
 
 	// upload with rclone
-	go task.Sync(c, msg, download)
+	go cmd.Sync(c, msg, download)
 
 	return
 }
@@ -43,7 +42,7 @@ func ytbCmdCtr(c tb.Context) (err error) {
 func helpCmdCtr(c tb.Context) error {
 	message := `
 命令： 
-/ytb yt-dlp 下载 
+/dl 下载 url
 /help 帮助
 /version 查看当前bot版本
 详细使用方法请看：https://github.com/wesleywxie/gogetit
