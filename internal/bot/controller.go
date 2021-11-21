@@ -26,16 +26,29 @@ func ytbCmdCtr(c tb.Context) error {
 		"url", url,
 		)
 
-	args := util.BuildYtdlpArgs(url)
+	args := util.GetYtdlpFilename(url)
+
+	cmd := exec.Command("yt-dlp", args...)
+	out, err := cmd.CombinedOutput()
+	if err != nil {
+		zap.S().Warnw("Failed to extract filename",
+			"url", url,
+			"error", err.Error(),
+		)
+		return c.Send("下载失败")
+	}
+	filename := string(out)
+
+	args = util.BuildYtdlpArgs(url, filename)
 
 	zap.S().Debugf("Executing command yt-dlp %v", args)
-	cmd := exec.Command("yt-dlp", args...)
+	cmd = exec.Command("yt-dlp", args...)
 
 	var stdoutBuf, stderrBuf bytes.Buffer
 	cmd.Stdout = io.MultiWriter(os.Stdout, &stdoutBuf)
 	cmd.Stderr = io.MultiWriter(os.Stderr, &stderrBuf)
 
-	err := cmd.Run()
+	err = cmd.Run()
 	outStr, errStr := string(stdoutBuf.Bytes()), string(stderrBuf.Bytes())
 
 	if err != nil {
