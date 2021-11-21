@@ -30,7 +30,6 @@ func GetYtdlpFilename(url string) []string {
 	args := []string {
 		"--print", "filename",
 		"--output", "%(title)s.%(ext)s",
-		"--restrict-filenames",
 		"--trim-filenames", "50",
 		url,
 	}
