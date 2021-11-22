@@ -37,7 +37,7 @@ var (
 	// AutoUploadDrive driver name for rclone to upload to
 	AutoUploadDrive		 string
 	// AutoUploadDir dir for rclone to upload to
-	AutoUploadDir		 string
+	AutoUploadDir		 string = ProjectName
 
 	RunMode = ReleaseMode
 
