@@ -39,11 +39,27 @@ func dlCmdCtr(c tb.Context) (err error) {
 	return
 }
 
+func subCmdCtr(c tb.Context) (err error) {
+	return nil
+}
+
+
+func unsubCmdCtr(c tb.Context) (err error) {
+	return nil
+}
+
+func listCmdCtr(c tb.Context) (err error) {
+	return nil
+}
+
 func helpCmdCtr(c tb.Context) error {
 	message := `
 命令： 
 /dl 下载 url
 /help 帮助
+/sub 订阅直播源
+/unsub 退订直播源
+/list 列出当前订阅的直播源
 /version 查看当前bot版本
 详细使用方法请看：https://github.com/wesleywxie/gogetit
 `

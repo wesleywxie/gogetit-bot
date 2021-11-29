@@ -62,6 +62,9 @@ func setCommands() {
 	// 设置bot命令提示信息
 	commands := []tb.Command{
 		{Text: "dl", Description: "下载"},
+		{Text: "sub", Description: "订阅直播源"},
+		{Text: "unsub", Description: "退订直播源"},
+		{Text: "list", Description: "列出当前订阅的直播源"},
 		{Text: "help", Description: "使用帮助"},
 		{Text: "version", Description: "bot版本"},
 	}
@@ -76,6 +79,9 @@ func setCommands() {
 func setHandle() {
 	B.Handle("/start", startCmdCtr)
 	B.Handle("/dl", dlCmdCtr)
+	B.Handle("/sub", subCmdCtr)
+	B.Handle("/unsub", unsubCmdCtr)
+	B.Handle("/list", listCmdCtr)
 	B.Handle("/help", helpCmdCtr)
 	B.Handle("/version", versionCmdCtr)
 }
