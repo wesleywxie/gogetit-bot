@@ -16,6 +16,7 @@ func GetFilename(c tb.Context, msg *tb.Message, url string, gen chan string) {
 		"--print", "filename",
 		"--output", "%(title)s.%(ext)s",
 		"--trim-filenames", "50",
+		"--no-warnings",
 		url,
 	)
 	out, err := cmd.CombinedOutput()
