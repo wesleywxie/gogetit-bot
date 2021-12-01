@@ -27,7 +27,8 @@ func GetFilename(c tb.Context, msg *tb.Message, url string, gen chan string) {
 		)
 		_, _ = c.Bot().Edit(msg, "下载失败")
 	} else {
-		filename = strings.TrimSuffix(string(out), "\n")
+		outputs := strings.Split(strings.TrimSuffix(string(out), "\n"), "\n")
+		filename = outputs[len(outputs) - 1]
 	}
 	gen <- filename
 }

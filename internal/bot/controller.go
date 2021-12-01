@@ -40,6 +40,23 @@ func dlCmdCtr(c tb.Context) (err error) {
 }
 
 func subCmdCtr(c tb.Context) (err error) {
+
+	url := GetHyperlinkFromMessage(c.Message())
+
+	zap.S().Debugw("Received live stream recording subscription link",
+		"url", url,
+	)
+
+	if url != "" {
+		subscribeLiveStream(m.Chat, url)
+	} else {
+		_, err := B.Send(m.Chat, "请回复RSS URL", &tb.ReplyMarkup{ForceReply: true})
+		if err == nil {
+			UserState[m.Chat.ID] = fsm.Sub
+		}
+	}
+
+
 	return nil
 }
 
