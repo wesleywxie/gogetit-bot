@@ -48,16 +48,10 @@ func subCmdCtr(c tb.Context) (err error) {
 	)
 
 	if url != "" {
-		subscribeLiveStream(m.Chat, url)
-	} else {
-		_, err := B.Send(m.Chat, "请回复RSS URL", &tb.ReplyMarkup{ForceReply: true})
-		if err == nil {
-			UserState[m.Chat.ID] = fsm.Sub
-		}
+		err = subscribeLiveStream(c, url)
 	}
 
-
-	return nil
+	return
 }
 
 

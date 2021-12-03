@@ -22,6 +22,8 @@ var (
 	BotToken             string
 	// TelegramEndpoint telegram api endpoint, empty by default
 	TelegramEndpoint 	 string = tb.DefaultApiURL
+	// UpdateInterval 刷新间隔
+	UpdateInterval int = 10
 
 	// UserAgent as the user agent for downloading task
 	UserAgent 			 string

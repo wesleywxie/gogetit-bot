@@ -84,6 +84,10 @@ func init() {
 		MaxThreadNum = viper.GetInt("dl.max_thread_num")
 	}
 
+	if viper.IsSet("update_interval") {
+		UpdateInterval = viper.GetInt("update_interval")
+	}
+
 	if viper.IsSet("upload.auto_upload") {
 		AutoUpload = viper.GetBool("upload.auto_upload")
 	}

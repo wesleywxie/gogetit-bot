@@ -1,7 +1,9 @@
 package bot
 
 import (
+	"fmt"
 	"github.com/wesleywxie/gogetit/internal/config"
+	"github.com/wesleywxie/gogetit/internal/model"
 	"go.uber.org/zap"
 	tb "gopkg.in/tucnak/telebot.v3"
 	"regexp"
@@ -99,5 +101,24 @@ func GetHyperlinkFromMessage(m *tb.Message) (url string) {
 		url = payloadMatching[0]
 	}
 
+	return
+}
+
+
+func subscribeLiveStream(c tb.Context, url string) (err error) {
+	msg, err := B.Send(c.Chat(), "处理中...")
+	chatID := c.Chat().ID
+	subscription, err := model.SubscribeLiveStream(chatID, url)
+	zap.S().Infof("%d subscribe %s with url:%s", chatID, url)
+
+	if err == nil {
+		_, _ = B.Edit(msg, fmt.Sprintf("[%s](%s) 订阅成功", subscription.KOL, subscription.Link),
+			&tb.SendOptions{
+				DisableWebPagePreview: true,
+				ParseMode:             tb.ModeMarkdown,
+			})
+	} else {
+		_, _ = B.Edit(msg, "订阅失败")
+	}
 	return
 }
