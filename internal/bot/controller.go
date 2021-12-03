@@ -56,8 +56,41 @@ func subCmdCtr(c tb.Context) (err error) {
 
 
 func unsubCmdCtr(c tb.Context) (err error) {
+	url := GetHyperlinkFromMessage(c.Message())
 
-	return nil
+	if url != "" {
+		subscription, err := model.GetSubscriptionsByUserIDAndURL(c.Chat().ID, url)
+
+		if err != nil {
+			if err.Error() == "record not found" {
+				_, err = B.Send(c.Chat(),"未订阅该源")
+
+			} else {
+				_, err = B.Send(c.Chat(), "退订失败")
+			}
+			return err
+
+		}
+
+		err = subscription.Unsubscribe()
+		if err == nil {
+			_, _ = B.Send(
+				c.Chat(),
+				fmt.Sprintf("退订 [%s](%s) 成功", subscription.KOL, subscription.Link),
+				&tb.SendOptions{
+					DisableWebPagePreview: true,
+					ParseMode:             tb.ModeMarkdown,
+				},
+			)
+			zap.S().Infof("%d for  unsubscribe [%s]%s", c.Chat().ID, subscription.KOL, subscription.Link)
+		} else {
+			_, err = B.Send(c.Chat(), err.Error())
+		}
+		return err
+
+	}
+	_, err = B.Send(c.Chat(), "退订请使用' /unsub URL ' 命令")
+	return
 }
 
 func listCmdCtr(c tb.Context) (err error) {

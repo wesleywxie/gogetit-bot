@@ -1,6 +1,7 @@
 package model
 
 import (
+	"errors"
 	"github.com/wesleywxie/gogetit/internal/config"
 	"strings"
 )
@@ -14,6 +15,14 @@ type Subscription struct {
 	Interval           int
 	WaitTime           int
 	EditTime
+}
+
+func (s *Subscription) Unsubscribe() error {
+	if s.ID == 0 {
+		return errors.New("can't delete 0 subscribe")
+	}
+
+	return db.Delete(&s).Error
 }
 
 func SubscribeLiveStream(userID int64, url string) (subscription Subscription, err error) {
@@ -41,6 +50,14 @@ func GetSubscriptionsByUserID(userID int64) ([]Subscription, error) {
 	db.Where("user_id=?", userID).Find(&subscriptions)
 
 	return subscriptions, nil
+}
+
+func GetSubscriptionsByUserIDAndURL(userID int64, url string) (Subscription, error) {
+	var subscription Subscription
+
+	db.Where("user_id=? and link=?", userID, url).First(&subscription)
+
+	return subscription, nil
 }
 
 func processUrl(url string) (KOL, category string) {
