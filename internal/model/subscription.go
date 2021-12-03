@@ -34,6 +34,15 @@ func SubscribeLiveStream(userID int64, url string) (subscription Subscription, e
 	return
 }
 
+
+func GetSubscriptionsByUserID(userID int64) ([]Subscription, error) {
+	var subscriptions []Subscription
+
+	db.Where("user_id=?", userID).Find(&subscriptions)
+
+	return subscriptions, nil
+}
+
 func processUrl(url string) (KOL, category string) {
 	if strings.Index(url, "chaturbate") > 0 {
 		url = strings.TrimSuffix(url, "/")

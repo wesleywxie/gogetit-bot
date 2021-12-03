@@ -56,11 +56,36 @@ func subCmdCtr(c tb.Context) (err error) {
 
 
 func unsubCmdCtr(c tb.Context) (err error) {
+
 	return nil
 }
 
 func listCmdCtr(c tb.Context) (err error) {
-	return nil
+	user, err := model.FindOrCreateUserByTelegramID(c.Chat().ID)
+	if err != nil {
+		_, err = B.Send(c.Chat(), fmt.Sprintf("内部错误 list@1"))
+		return
+	}
+
+	subscriptions, err := user.GetSubscriptions()
+	if err != nil {
+		_, err = B.Send(c.Chat(), fmt.Sprintf("内部错误 list@2"))
+		return
+	}
+
+	rspMessage := "当前订阅列表：\n"
+	if len(subscriptions) == 0 {
+		rspMessage = "订阅列表为空"
+	} else {
+		for _, subscription := range subscriptions {
+			rspMessage = rspMessage + fmt.Sprintf("[[%d]] [%s](%s)\n", subscription.ID, subscription.KOL, subscription.Link)
+		}
+	}
+	_, err = B.Send(c.Chat(), rspMessage, &tb.SendOptions{
+		DisableWebPagePreview: true,
+		ParseMode:             tb.ModeMarkdown,
+	})
+	return
 }
 
 func helpCmdCtr(c tb.Context) error {

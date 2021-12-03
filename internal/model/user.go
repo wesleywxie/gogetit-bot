@@ -10,6 +10,11 @@ type User struct {
 	EditTime
 }
 
+// GetSubscriptions get user subscribe and fetcher source
+func (user *User) GetSubscriptions() ([]Subscription, error) {
+	return GetSubscriptionsByUserID(user.TelegramID)
+}
+
 // FindOrCreateUserByTelegramID find subscriber or init a subscriber by telegram ID
 func FindOrCreateUserByTelegramID(telegramID int64) (*User, error) {
 	var user User

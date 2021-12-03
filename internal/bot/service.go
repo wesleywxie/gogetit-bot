@@ -104,7 +104,6 @@ func GetHyperlinkFromMessage(m *tb.Message) (url string) {
 	return
 }
 
-
 func subscribeLiveStream(c tb.Context, url string) (err error) {
 	msg, err := B.Send(c.Chat(), "处理中...")
 	chatID := c.Chat().ID
