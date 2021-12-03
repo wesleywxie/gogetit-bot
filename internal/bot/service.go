@@ -109,7 +109,7 @@ func subscribeLiveStream(c tb.Context, url string) (err error) {
 	msg, err := B.Send(c.Chat(), "处理中...")
 	chatID := c.Chat().ID
 	subscription, err := model.SubscribeLiveStream(chatID, url)
-	zap.S().Infof("%d subscribe %s with url:%s", chatID, url)
+	zap.S().Infof("%d subscribe url %s", chatID, url)
 
 	if err == nil {
 		_, _ = B.Edit(msg, fmt.Sprintf("[%s](%s) 订阅成功", subscription.KOL, subscription.Link),
