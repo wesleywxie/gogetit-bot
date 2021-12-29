@@ -1,19 +1,17 @@
 package task
 
-import "go.uber.org/zap"
+import (
+	"go.uber.org/zap"
+)
 
 var (
-	taskList []Task
+	taskList = []Task{}
 )
 
 type Task interface {
 	Start()
 	Stop()
 	Name() string
-}
-
-func init() {
-	taskList = []Task{}
 }
 
 func registerTask(task Task) {

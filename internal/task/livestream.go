@@ -6,6 +6,8 @@ import (
 	"github.com/wesleywxie/gogetit/internal/model"
 	"go.uber.org/atomic"
 	"go.uber.org/zap"
+	"io/ioutil"
+	"net/http"
 	"time"
 )
 
@@ -66,7 +68,14 @@ func (t *LivestreamUpdateTask) Start() {
 				// Check if the recoding is ON or OFF
 				if subscription.Streaming == false {
 					// Check if the broadcast is ON or OFF
-					broadcasting, _ := cmd.CheckLiveness(subscription.Link)
+					content, _ := makeGetRequest(subscription.Link)
+					zap.S().Debugw("Check liveness...",
+						"url", subscription.Link,
+						"content", content,
+					)
+					// TODO better mechanism to check liveness
+					broadcasting := len(content) > 0
+
 					if broadcasting {
 						// Start record and upload
 						subscription.Streaming = true
@@ -85,6 +94,31 @@ func (t *LivestreamUpdateTask) Start() {
 			time.Sleep(time.Duration(config.UpdateInterval) * time.Minute)
 		}
 	}()
+}
+
+func makeGetRequest(url string) (content string, err error) {
+	client := &http.Client{}
+	req, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		zap.S().Error(err)
+		return
+	}
+	req.Header.Set("User-Agent", config.UserAgent)
+	resp, err := client.Do(req)
+	if err != nil {
+		zap.S().Error(err)
+		return
+	}
+
+	defer resp.Body.Close()
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		zap.S().Error(err)
+		return
+	}
+
+	content = string(body)
+	return
 }
 
 // LivestreamUpdateTask Livestream 更新任务
