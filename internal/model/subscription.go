@@ -7,13 +7,13 @@ import (
 )
 
 type Subscription struct {
-	ID                 uint `gorm:"primary_key;AUTO_INCREMENT"`
-	UserID             int64
-	Category           string
-	KOL                string
-	Link 			   string
-	Interval           int
-	WaitTime           int
+	ID        uint `gorm:"primary_key;AUTO_INCREMENT"`
+	UserID    int64
+	Category  string
+	KOL       string
+	Link      string
+	Interval  int
+	Streaming bool
 	EditTime
 }
 
@@ -34,7 +34,7 @@ func SubscribeLiveStream(userID int64, url string) (subscription Subscription, e
 			subscription.Category = category
 			subscription.Link = url
 			subscription.Interval = config.UpdateInterval
-			subscription.WaitTime = config.UpdateInterval
+			subscription.Streaming = false
 			if db.Create(&subscription).Error == nil {
 				return subscription, nil
 			}
@@ -43,28 +43,35 @@ func SubscribeLiveStream(userID int64, url string) (subscription Subscription, e
 	return
 }
 
+func GetSubscriptions() ([]Subscription, error) {
+	var subscriptions []Subscription
+
+	err := db.Find(&subscriptions).Error
+
+	return subscriptions, err
+}
 
 func GetSubscriptionsByUserID(userID int64) ([]Subscription, error) {
 	var subscriptions []Subscription
 
-	db.Where("user_id=?", userID).Find(&subscriptions)
+	err := db.Where("user_id=?", userID).Find(&subscriptions).Error
 
-	return subscriptions, nil
+	return subscriptions, err
 }
 
 func GetSubscriptionsByUserIDAndURL(userID int64, url string) (Subscription, error) {
 	var subscription Subscription
 
-	db.Where("user_id=? and link=?", userID, url).First(&subscription)
+	err := db.Where("user_id=? and link=?", userID, url).First(&subscription).Error
 
-	return subscription, nil
+	return subscription, err
 }
 
 func processUrl(url string) (KOL, category string) {
 	if strings.Index(url, "chaturbate") > 0 {
 		url = strings.TrimSuffix(url, "/")
 		category = "chaturbate"
-		KOL = url[strings.LastIndex(url,"/") + 1 :]
+		KOL = url[strings.LastIndex(url, "/")+1:]
 	}
 	return
 }

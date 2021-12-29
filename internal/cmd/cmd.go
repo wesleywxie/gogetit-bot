@@ -7,7 +7,7 @@ import (
 	"os/exec"
 )
 
-func proceed(command string, args... string) error {
+func proceed(command string, args ...string) (string, error) {
 	cmd := exec.Command(command, args...)
 
 	zap.S().Debugf("Executing command %s with args %v", command, args)
@@ -24,5 +24,5 @@ func proceed(command string, args... string) error {
 
 	zap.S().Debugf("Finished command with output\n %v", outStr)
 
-	return err
+	return outStr, err
 }

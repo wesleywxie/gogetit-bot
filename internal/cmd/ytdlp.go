@@ -28,11 +28,10 @@ func GetFilename(c tb.Context, msg *tb.Message, url string, gen chan string) {
 		_, _ = c.Bot().Edit(msg, "下载失败")
 	} else {
 		outputs := strings.Split(strings.TrimSuffix(string(out), "\n"), "\n")
-		filename = outputs[len(outputs) - 1]
+		filename = outputs[len(outputs)-1]
 	}
 	gen <- filename
 }
-
 
 func ExecDownload(c tb.Context, msg *tb.Message, url string, gen chan string, download chan string) {
 
@@ -58,7 +57,7 @@ func ExecDownload(c tb.Context, msg *tb.Message, url string, gen chan string, do
 
 		command := "yt-dlp"
 
-		err := proceed(command, args...)
+		_, err := proceed(command, args...)
 
 		if err != nil {
 			zap.S().Warnw("Failed to download",
@@ -71,4 +70,12 @@ func ExecDownload(c tb.Context, msg *tb.Message, url string, gen chan string, do
 	}
 
 	download <- filename
+}
+
+func Recording(url string, filename string, record chan string) {
+	zap.S().Infow("Recording...",
+		"url", url,
+		"filename", filename)
+
+	record <- filename
 }

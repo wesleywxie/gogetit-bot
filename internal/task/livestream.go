@@ -1,6 +1,7 @@
 package task
 
 import (
+	"github.com/wesleywxie/gogetit/internal/cmd"
 	"github.com/wesleywxie/gogetit/internal/config"
 	"github.com/wesleywxie/gogetit/internal/model"
 	"go.uber.org/atomic"
@@ -34,11 +35,12 @@ func (t *LivestreamUpdateTask) Name() string {
 	return "LivestreamUpdateTask"
 }
 
-// Stop stop task
+// Stop 停止
 func (t *LivestreamUpdateTask) Stop() {
+	t.isStop.Store(true)
 }
 
-// Start run task
+// Start 启动
 func (t *LivestreamUpdateTask) Start() {
 	if config.RunMode == config.TestMode {
 		return
@@ -51,6 +53,33 @@ func (t *LivestreamUpdateTask) Start() {
 			if t.isStop.Load() == true {
 				zap.S().Info("LivestreamUpdateTask stopped")
 				return
+			}
+
+			subscriptions, err := model.GetSubscriptions()
+
+			if err != nil {
+				zap.S().Errorf("Failed to get subscriptions from db, error:%v", err)
+			}
+
+			for _, subscription := range subscriptions {
+				zap.S().Debugf("Checking subscription[%d], %v", subscription.ID, subscription.KOL)
+				// Check if the recoding is ON or OFF
+				if subscription.Streaming == false {
+					// Check if the broadcast is ON or OFF
+					broadcasting, _ := cmd.CheckLiveness(subscription.Link)
+					if broadcasting {
+						// Start record and upload
+						subscription.Streaming = true
+						// TODO update database
+
+						// record
+						record := make(chan string)
+						go cmd.Recording(subscription.Link, "random-file-name", record)
+
+						// upload
+						go cmd.Upload(record)
+					}
+				}
 			}
 
 			time.Sleep(time.Duration(config.UpdateInterval) * time.Minute)
