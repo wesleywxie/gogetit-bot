@@ -15,12 +15,12 @@ func init() {
 	registerTask(task)
 }
 
-// Register 注册rss更新订阅者
+// Register 注册更新订阅者
 func (t *LivestreamUpdateTask) Register(observer LivestreamUpdateObserver) {
 	t.observerList = append(t.observerList, observer)
 }
 
-// Deregister 注销rss更新订阅者
+// Deregister 注销更新订阅者
 func (t *LivestreamUpdateTask) Deregister(removeObserver LivestreamUpdateObserver) {
 	for i, observer := range t.observerList {
 		if observer.id() == removeObserver.id() {
