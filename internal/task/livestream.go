@@ -77,13 +77,9 @@ func (t *LivestreamUpdateTask) Start() {
 					broadcasting := len(content) > 0
 
 					if broadcasting {
-						// Start record and upload
-						subscription.Streaming = true
-						// TODO update database
-
 						// record
 						record := make(chan string)
-						go cmd.Recording(subscription.Link, "random-file-name", record)
+						go cmd.Recording(subscription, record)
 
 						// upload
 						go cmd.Upload(record)

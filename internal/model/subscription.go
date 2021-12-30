@@ -51,10 +51,18 @@ func GetSubscriptions() ([]Subscription, error) {
 	return subscriptions, err
 }
 
+func GetSubscriptionsByID(subscriptionID uint) (Subscription, error) {
+	var subscription Subscription
+
+	err := db.Where("id=?", subscriptionID).Find(&subscription).Error
+
+	return subscription, err
+}
+
 func GetSubscriptionsByUserID(userID int64) ([]Subscription, error) {
 	var subscriptions []Subscription
 
-	err := db.Where("user_id=?", userID).Find(&subscriptions).Error
+	err := db.Where("user_id=?", userID).First(&subscriptions).Error
 
 	return subscriptions, err
 }
@@ -65,6 +73,14 @@ func GetSubscriptionsByUserIDAndURL(userID int64, url string) (Subscription, err
 	err := db.Where("user_id=? and link=?", userID, url).First(&subscription).Error
 
 	return subscription, err
+}
+
+// UpdateStreamingStatus update streaming status for a specific subscription
+func UpdateStreamingStatus(subscriptionID uint, streaming bool) (subscription Subscription, err error) {
+	subscription, err = GetSubscriptionsByID(subscriptionID)
+	subscription.Streaming = streaming
+	db.Save(&subscription)
+	return
 }
 
 func processUrl(url string) (KOL, category string) {

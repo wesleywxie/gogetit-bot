@@ -3,10 +3,12 @@ package cmd
 import (
 	"fmt"
 	"github.com/wesleywxie/gogetit/internal/config"
+	"github.com/wesleywxie/gogetit/internal/model"
 	"go.uber.org/zap"
 	tb "gopkg.in/tucnak/telebot.v3"
 	"os/exec"
 	"strings"
+	"time"
 )
 
 func GetFilename(c tb.Context, msg *tb.Message, url string, gen chan string) {
@@ -72,10 +74,16 @@ func ExecDownload(c tb.Context, msg *tb.Message, url string, gen chan string, do
 	download <- filename
 }
 
-func Recording(url string, filename string, record chan string) {
+func Recording(subscription model.Subscription, record chan string) {
+	_, _ = model.UpdateStreamingStatus(subscription.ID, true)
+
+	now := time.Now()
+	filename := fmt.Sprintf("%v.mp4", now.Format("20060201150405"))
+
 	zap.S().Infow("Recording...",
-		"url", url,
+		"url", subscription.Link,
 		"filename", filename)
 
+	_, _ = model.UpdateStreamingStatus(subscription.ID, false)
 	record <- filename
 }
