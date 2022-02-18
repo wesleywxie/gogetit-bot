@@ -9,7 +9,7 @@ require (
 	go.uber.org/zap v1.21.0
 	golang.org/x/net v0.0.0-20210813160813-60bc85c4be6d
 	gopkg.in/tucnak/telebot.v3 v3.0.0-20211108093419-844466d6faf3
-	moul.io/zapgorm v1.1.3
+	moul.io/zapgorm v1.1.5
 )
 
 require (
