@@ -1,6 +1,6 @@
 package cmd
 
-import "github.com/wesleywxie/gogetit/internal/config"
+import "github.com/wesleywxie/gogetit-bot/internal/config"
 
 func CheckLiveness(url string) (bool, error) {
 	output, error := proceed("curl",

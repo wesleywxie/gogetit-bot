@@ -2,9 +2,9 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/wesleywxie/gogetit/internal/config"
+	"github.com/wesleywxie/gogetit-bot/internal/config"
 	"go.uber.org/zap"
-	tb "gopkg.in/tucnak/telebot.v3"
+	tb "gopkg.in/telebot.v3"
 	"os"
 	"path/filepath"
 	"time"

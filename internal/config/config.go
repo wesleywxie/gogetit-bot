@@ -3,9 +3,8 @@ package config
 import (
 	"fmt"
 	"github.com/spf13/viper"
-	tb "gopkg.in/tucnak/telebot.v3"
+	tb "gopkg.in/telebot.v3"
 )
-
 
 type RunType string
 
@@ -14,32 +13,32 @@ var (
 	commit  = "none"
 	date    = "unknown"
 
-	ProjectName          string = "gogetit"
-	Socks5               string
+	ProjectName string = "gogetit"
+	Socks5      string
 	// SQLitePath relative path to SQLite db file
-	SQLitePath           string
+	SQLitePath string
 	// BotToken telegram bot token
-	BotToken             string
+	BotToken string
 	// TelegramEndpoint telegram api endpoint, empty by default
-	TelegramEndpoint 	 string = tb.DefaultApiURL
+	TelegramEndpoint string = tb.DefaultApiURL
 	// UpdateInterval 刷新间隔
 	UpdateInterval int = 10
 
 	// UserAgent as the user agent for downloading task
-	UserAgent 			 string
+	UserAgent string
 	// OutputDir folder to store downloaded files
-	OutputDir 			 string
+	OutputDir string
 	// CookieFile cookie file exported for specific website
-	CookieFile 			 string
+	CookieFile string
 	// MaxThreadNum max thread count for aria2c
-	MaxThreadNum 		 int
+	MaxThreadNum int
 
 	// AutoUpload when download finished
-	AutoUpload           bool = false
+	AutoUpload bool = false
 	// AutoUploadDrive driver name for rclone to upload to
-	AutoUploadDrive		 string
+	AutoUploadDrive string
 	// AutoUploadDir dir for rclone to upload to
-	AutoUploadDir		 string = ProjectName
+	AutoUploadDir string = ProjectName
 
 	RunMode = ReleaseMode
 

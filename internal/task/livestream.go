@@ -1,9 +1,9 @@
 package task
 
 import (
-	"github.com/wesleywxie/gogetit/internal/cmd"
-	"github.com/wesleywxie/gogetit/internal/config"
-	"github.com/wesleywxie/gogetit/internal/model"
+	"github.com/wesleywxie/gogetit-bot/internal/cmd"
+	"github.com/wesleywxie/gogetit-bot/internal/config"
+	"github.com/wesleywxie/gogetit-bot/internal/model"
 	"go.uber.org/atomic"
 	"go.uber.org/zap"
 	"io/ioutil"

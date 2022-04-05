@@ -3,8 +3,8 @@ package model
 import (
 	"fmt"
 	"github.com/jinzhu/gorm"
-	"github.com/wesleywxie/gogetit/internal/config"
-	"github.com/wesleywxie/gogetit/internal/log"
+	"github.com/wesleywxie/gogetit-bot/internal/config"
+	"github.com/wesleywxie/gogetit-bot/internal/log"
 	"go.uber.org/zap"
 	"moul.io/zapgorm"
 	"time"
@@ -17,7 +17,6 @@ type EditTime struct {
 	CreatedAt time.Time
 	UpdatedAt time.Time
 }
-
 
 // InitDB init db object
 func InitDB() {

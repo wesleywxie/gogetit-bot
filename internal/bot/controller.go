@@ -2,11 +2,11 @@ package bot
 
 import (
 	"fmt"
-	"github.com/wesleywxie/gogetit/internal/cmd"
-	"github.com/wesleywxie/gogetit/internal/config"
-	"github.com/wesleywxie/gogetit/internal/model"
+	"github.com/wesleywxie/gogetit-bot/internal/cmd"
+	"github.com/wesleywxie/gogetit-bot/internal/config"
+	"github.com/wesleywxie/gogetit-bot/internal/model"
 	"go.uber.org/zap"
-	tb "gopkg.in/tucnak/telebot.v3"
+	tb "gopkg.in/telebot.v3"
 )
 
 func startCmdCtr(c tb.Context) error {
@@ -20,7 +20,7 @@ func dlCmdCtr(c tb.Context) (err error) {
 
 	zap.S().Debugw("Received ytb download command",
 		"url", url,
-		)
+	)
 
 	gen := make(chan string)
 	download := make(chan string)
@@ -54,7 +54,6 @@ func subCmdCtr(c tb.Context) (err error) {
 	return
 }
 
-
 func unsubCmdCtr(c tb.Context) (err error) {
 	url := GetHyperlinkFromMessage(c.Message())
 
@@ -63,7 +62,7 @@ func unsubCmdCtr(c tb.Context) (err error) {
 
 		if err != nil {
 			if err.Error() == "record not found" {
-				_, err = B.Send(c.Chat(),"未订阅该源")
+				_, err = B.Send(c.Chat(), "未订阅该源")
 
 			} else {
 				_, err = B.Send(c.Chat(), "退订失败")

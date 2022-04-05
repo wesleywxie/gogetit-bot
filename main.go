@@ -2,10 +2,10 @@ package main
 
 import (
 	_ "github.com/jinzhu/gorm/dialects/sqlite"
-	"github.com/wesleywxie/gogetit/internal/bot"
-	_ "github.com/wesleywxie/gogetit/internal/log"
-	"github.com/wesleywxie/gogetit/internal/model"
-	"github.com/wesleywxie/gogetit/internal/task"
+	"github.com/wesleywxie/gogetit-bot/internal/bot"
+	_ "github.com/wesleywxie/gogetit-bot/internal/log"
+	"github.com/wesleywxie/gogetit-bot/internal/model"
+	"github.com/wesleywxie/gogetit-bot/internal/task"
 	"go.uber.org/zap"
 	"os"
 	"os/signal"

@@ -2,7 +2,7 @@ package model
 
 import (
 	"errors"
-	"github.com/wesleywxie/gogetit/internal/config"
+	"github.com/wesleywxie/gogetit-bot/internal/config"
 	"strings"
 )
 

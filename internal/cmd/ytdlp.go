@@ -2,10 +2,10 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/wesleywxie/gogetit/internal/config"
-	"github.com/wesleywxie/gogetit/internal/model"
+	"github.com/wesleywxie/gogetit-bot/internal/config"
+	"github.com/wesleywxie/gogetit-bot/internal/model"
 	"go.uber.org/zap"
-	tb "gopkg.in/tucnak/telebot.v3"
+	tb "gopkg.in/telebot.v3"
 	"os/exec"
 	"strings"
 	"time"
@@ -75,7 +75,6 @@ func ExecDownload(c tb.Context, msg *tb.Message, url string, gen chan string, do
 }
 
 func Recording(subscription model.Subscription, record chan string) {
-	_, _ = model.UpdateStreamingStatus(subscription.ID, true)
 
 	now := time.Now()
 	filename := fmt.Sprintf("%v.mp4", now.Format("20060201150405"))
@@ -83,7 +82,33 @@ func Recording(subscription model.Subscription, record chan string) {
 	zap.S().Infow("Recording...",
 		"url", subscription.Link,
 		"filename", filename)
+	_, _ = model.UpdateStreamingStatus(subscription.ID, true)
 
+	args := make([]string, 0, 7)
+	args = append(args, "--downloader-args", fmt.Sprintf("-x %d -k 1M", config.MaxThreadNum))
+	args = append(args, "--output", filename)
+	if len(config.OutputDir) > 0 {
+		args = append(args, "--paths", config.OutputDir)
+	}
+	if len(config.CookieFile) > 0 {
+		args = append(args, "--cookies", config.CookieFile)
+	}
+	if len(config.UserAgent) > 0 {
+		args = append(args, "--user-agent", config.UserAgent)
+	}
+	args = append(args, subscription.Link)
+
+	command := "yt-dlp"
+
+	_, err := proceed(command, args...)
+
+	if err != nil {
+		zap.S().Warnw("Failed to download",
+			"url", subscription.Link,
+			"error", err.Error(),
+		)
+	}
 	_, _ = model.UpdateStreamingStatus(subscription.ID, false)
+
 	record <- filename
 }

@@ -2,13 +2,12 @@ package bot
 
 import (
 	"fmt"
-	"github.com/wesleywxie/gogetit/internal/config"
-	"github.com/wesleywxie/gogetit/internal/model"
+	"github.com/wesleywxie/gogetit-bot/internal/config"
+	"github.com/wesleywxie/gogetit-bot/internal/model"
 	"go.uber.org/zap"
-	tb "gopkg.in/tucnak/telebot.v3"
+	tb "gopkg.in/telebot.v3"
 	"regexp"
 )
-
 
 // IsUserAllowed check user is allowed to use bot
 func isUserAllowed(upd *tb.Update) bool {
@@ -91,7 +90,7 @@ func GetHyperlinkFromMessage(m *tb.Message) (url string) {
 	for _, entity := range m.Entities {
 		if entity.Type == tb.EntityURL {
 			if url == "" {
-				url = m.Text[entity.Offset : entity.Offset + entity.Length]
+				url = m.Text[entity.Offset : entity.Offset+entity.Length]
 			}
 		}
 	}

@@ -1,7 +1,7 @@
 package log
 
 import (
-	"github.com/wesleywxie/gogetit/internal/config"
+	"github.com/wesleywxie/gogetit-bot/internal/config"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 	"strings"
@@ -12,7 +12,6 @@ var (
 	Logger    *zap.Logger
 	zapConfig zap.Config
 )
-
 
 func init() {
 	logLevel := config.GetString("log.level")

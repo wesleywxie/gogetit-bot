@@ -1,7 +1,7 @@
 package util
 
 import (
-	"github.com/wesleywxie/gogetit/internal/config"
+	"github.com/wesleywxie/gogetit-bot/internal/config"
 	"net/http"
 	"time"
 
