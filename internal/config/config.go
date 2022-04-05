@@ -13,7 +13,7 @@ var (
 	commit  = "none"
 	date    = "unknown"
 
-	ProjectName string = "gogetit"
+	ProjectName string = "gogetit-bot"
 	Socks5      string
 	// SQLitePath relative path to SQLite db file
 	SQLitePath string
