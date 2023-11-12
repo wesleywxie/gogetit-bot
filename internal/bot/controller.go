@@ -2,6 +2,7 @@ package bot
 
 import (
 	"fmt"
+
 	"github.com/wesleywxie/gogetit-bot/internal/cmd"
 	"github.com/wesleywxie/gogetit-bot/internal/config"
 	"github.com/wesleywxie/gogetit-bot/internal/model"
@@ -129,7 +130,7 @@ func helpCmdCtr(c tb.Context) error {
 /unsub 退订直播源
 /list 列出当前订阅的直播源
 /version 查看当前bot版本
-详细使用方法请看：https://github.com/wesleywxie/gogetit
+详细使用方法请看：https://github.com/wesleywxie/gogetit-bot
 `
 	return c.Send(message)
 }

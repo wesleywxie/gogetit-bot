@@ -1,6 +1,6 @@
 module github.com/wesleywxie/gogetit-bot
 
-go 1.20
+go 1.21
 
 require (
 	github.com/jinzhu/gorm v1.9.16
