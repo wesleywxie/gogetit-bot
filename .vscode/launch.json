@@ -1,0 +1,28 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+      {
+          "name": "Launch Package",
+          "type": "go",
+          "request": "launch",
+          "mode": "debug",
+          "program": "${fileDirname}"
+      },
+      {
+          "name": "Launch File",
+          "type": "go",
+          "request": "launch",
+          "mode": "debug",
+          "program": "${file}"
+      },
+      {
+          "name": "Launch Tests",
+          "type": "go",
+          "request": "launch",
+          "mode": "test",
+          "program": "${fileDirname}"
+      }
+  ]
+}
+
+}
