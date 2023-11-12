@@ -8,7 +8,7 @@ require (
 	go.uber.org/atomic v1.11.0
 	go.uber.org/zap v1.26.0
 	golang.org/x/net v0.17.0
-	gopkg.in/telebot.v3 v3.0.0
+	gopkg.in/telebot.v3 v3.1.4
 	moul.io/zapgorm v1.1.5
 )
 
